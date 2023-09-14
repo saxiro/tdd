@@ -73,7 +73,7 @@ namespace Alura.Estacionamento.Testes
 
         [Theory]
         [InlineData("André Silva", "ASD-1498", "Preta", "Gol")]
-        public void LocalizaVeiculoNoPatioComBaseNaPlaca(string proprietario,
+        public void LocalizaVeiculoNoPatioComBaseNoIdTicket(string proprietario,
             string placa, string cor, string modelo)
         {
             //Arrange
@@ -87,10 +87,10 @@ namespace Alura.Estacionamento.Testes
             estacionamento.RegistrarEntradaVeiculo(veiculo);
 
             //Act
-            var consultado = estacionamento.PesquisaVeiculo(veiculo.Placa);
+            var consultado = estacionamento.PesquisaVeiculo(veiculo.IdTicket);
 
             //Assert
-            Assert.Equal(placa, consultado.Placa);
+            Assert.Equal(veiculo.IdTicket, consultado.IdTicket);
         }
 
         [Theory(DisplayName = "Nao Localiza Veiculo")]
@@ -134,6 +134,8 @@ namespace Alura.Estacionamento.Testes
             veiculoAlterado.Cor = "Preta"; //Alterado
             veiculoAlterado.Modelo = "Celta Spirit";
             veiculoAlterado.Placa = "MST-1866";
+            veiculoAlterado.IdTicket = veiculo.IdTicket;
+            veiculoAlterado.Ticket = veiculo.Ticket;
 
             //Act
             Veiculo alterado = estacionamento.AlterarDadosVeiculo(veiculoAlterado);

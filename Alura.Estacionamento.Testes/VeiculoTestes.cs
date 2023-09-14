@@ -1,12 +1,13 @@
 using Alura.Estacionamento.Alura.Estacionamento.Modelos;
 using Alura.Estacionamento.Modelos;
 using System;
+using System.Runtime.ConstrainedExecution;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Alura.Estacionamento.Testes
 {
-    public class VeiculoTestes
+    public class VeiculoTestes : IDisposable
     {
         private Veiculo veiculo;
         public ITestOutputHelper SaidaConsoleTeste;
@@ -66,6 +67,43 @@ namespace Alura.Estacionamento.Testes
 
             //Assert
             Assert.Contains("Ficha do Veículo", dados);
+        }
+
+        [Fact]
+        public void TestaNomeProprietarioVeiculoComMenosDeTresCaracteres() 
+        {
+            //Arrange
+            string nomeProprietario = "Ab";
+            
+            //Assert
+            Assert.Throws<System.FormatException>(
+                //Act
+                () => new Veiculo(nomeProprietario)
+                );
+        }
+
+        [Fact]
+        public void TestaMensagemDeExcecaoDoQuartoCaractereDaPlaca()
+        {
+            //Arrange
+            string placa = "MSTF1866";
+
+            //Act
+            var erro = Assert.Throws<System.FormatException>(
+
+                () => new Veiculo().Placa = placa
+
+                );
+
+            //Assert
+            Assert.Equal("O 4° caractere deve ser um hífen", erro.Message);
+
+        }
+
+        public void Dispose()
+        {
+            SaidaConsoleTeste.WriteLine("Disposable invocado.");
+            GC.SuppressFinalize(this);
         }
     }
 }
